@@ -655,13 +655,18 @@ class BADBroker:
     def __del__(self):
         self.rabbitMQ.close()
 
+    @tornado.gen.coroutine
     def setupBroker(self):
         commands = ''
         with open("1") as f:
             for line in f.readlines():
                 if not line.startswith('#'):
                     commands = commands + line + '\n'
-        self.asterix_backend.executeAQL(commands)
+        log.info('Executing commands: ' + commands)
+        status, response = yield self.asterix_backend.executeAQL(commands)
+
+        if status != 200:
+            log.error('Broker setup failed ' + response)
 
 def test_broker():
     broker = BADBroker(asterix_backend)
