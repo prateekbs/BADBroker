@@ -1,0 +1,152 @@
+import tornado.httpclient
+import tornado.gen
+import json
+import time
+
+
+def async_call(URL, service_point, post_data, callback, **kwargs):    
+    http_client = tornado.httpclient.AsyncHTTPClient()
+    
+    try:
+        request = tornado.httpclient.HTTPRequest(URL + "/" + service_point, method = 'POST',
+                body = json.dumps(post_data), request_timeout = 5)
+        http_client.fetch(request, callback, **kwargs)        
+    
+    except tornado.httpclient.HTTPError as e:
+        print 'Error:', str(e)
+    except Exception as e:
+        print 'Error:', str(e)
+    
+           
+def service_call(URL, service_point, post_data):
+    http_client = tornado.httpclient.HTTPClient()
+    try:        
+        request = tornado.httpclient.HTTPRequest(URL + "/" + service_point, method = 'POST', body = json.dumps(post_data))            
+        response = http_client.fetch(request)
+        return json.loads(response.body)
+        
+    except tornado.httpclient.HTTPError as e:
+        # HTTPError is raised for non-200 responses; the response
+        # can be found in e.response.
+        print("Error: " + str(e))
+    except Exception as e:
+        # Other errors are possible, such as IOError.
+        print("Error: " + str(e))
+    
+
+URL = "http://localhost:8989"
+
+
+class BADClient:
+    def __init__(self, username):
+        self.username = username
+        self.userid = ""
+        self.accesstoken = ""
+        self.subscriptions = []
+        self.http_client = tornado.httpclient.AsyncHTTPClient()
+        
+    def register(self, username, email, password):
+        post_data = {'username' : username, 'email': email, 'password': password}
+        response = service_call(URL, "register", post_data)
+        if response['status'] != 'success':            
+            print 'Error:', response['error']            
+        else:
+            self.userid = response['userid']
+            print self.username, 'Register', json.dumps(response)         
+    
+    def login(self, username, password):
+        post_data = {'username' : username, 'password': password}
+        response = service_call(URL, "login", post_data)
+        if response['status'] != 'success':
+            print 'Error:', response['error']
+        else:   
+            self.userid = response['userid']
+            self.accesstoken = response['accesstoken']
+            print self.username, 'Login', json.dumps(response)    
+    
+    def subscribe(self, channelName, parameters): 
+        post_data = {'userid' : self.userid, 'accesstoken': self.accesstoken, 
+            'channelName': channelName, 'parameters' : parameters}
+        response = service_call(URL, "subscribe", post_data)
+        
+        if response['status'] != 'success':
+            print 'Error:', response['error']
+        else:    
+            subid = response['subid']
+            timestamp = response['timestamp']  
+            self.subscriptions.append({'subid': subid, 'timestamp': timestamp, 
+                    'channelName': channelName, 'parameters': parameters})                  
+            print self.username, 'Subscribe', json.dumps(response)
+     
+    
+    @tornado.gen.coroutine
+    def getresults(self, subindex, maxrecords):
+        if subindex >= len(self.subscriptions):
+            print self.username, 'Error', 'invalid subindex, given %d, length %d' %(subindex, len(self.subscriptions))
+            return
+            
+        subid = self.subscriptions[subindex]['subid']
+        timestamp = self.subscriptions[subindex]['timestamp']
+        
+        print self.username, 'Getresults for %s....' %(subid)
+        
+        try:
+            post_data = {'userid' : self.userid, 'accesstoken' : self.accesstoken,
+                 'subid': subid, 'timestamp': timestamp, 'maxrecords': maxrecords}
+            request = tornado.httpclient.HTTPRequest(URL + "/" + 'getresults', 
+                    method = 'POST',
+                    body = json.dumps(post_data), 
+                    request_timeout = 10)
+            
+            response = yield self.http_client.fetch(request)        
+            
+            if response.error:                
+                print self.username, 'GetresultsError', str(response.error)
+            else:
+                print self.username, 'Getresults', response.body
+                timestamp = self.onNewResultsOnChannel(json.loads(response.body))
+                tornado.ioloop.IOLoop.current().add_callback(self.getresults, subindex, timestamp)
+                            
+        except tornado.httpclient.HTTPError as e:
+            print 'Error:', str(e)
+        except Exception as e:
+            print 'Error:', str(e)
+    
+    def onNewResultsOnChannel(self, response):        
+        subid = response['subid']
+        results = response['results']
+        # consume results
+        timestamp = 100
+        return timestamp     
+     
+class Driver():
+    def __init__(self):
+        self.users = {}
+    
+    @tornado.gen.coroutine    
+    def run(self):        
+        with open('client-commands.txt') as f:
+            for line in f.readlines():
+                if line.startswith("#") or len(line) <= 1:
+                    continue
+                print line                        
+                command = json.loads(line)
+                if command['command'] == 'register':
+                    username = command['username']
+                    user = BADClient(username)
+                    self.users[username] = user 
+                    user.register(command['username'], command['email'], command['password'])       
+                elif command['command'] == 'login':
+                    user = self.users[command['username']]
+                    user.login(command['username'], command['password'])
+                elif command['command'] == 'subscribe': 
+                    user = self.users[command['username']]
+                    user.subscribe(command['channelName'], command['parameters'])  
+                elif command['command'] == 'getresults':
+                    user = self.users[command['username']]
+                    user.getresults(command['subindex'], command['maxrecords'])    
+            yield
+        
+if __name__ == "__main__":
+    Driver().run()
+    tornado.ioloop.IOLoop.instance().start()

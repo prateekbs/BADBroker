@@ -1,0 +1,2 @@
+{"emergencyType":"tornado","impactZone":circle("100,15 15.0"),"message":"Hide!","severity":10,"timestamp":datetime("2015-11-25T09:10:00"),"expirationTime":datetime("2015-11-25T10:00:00")}
+{"emergencyType":"flood","impactZone":circle("15,15 15.0"),"message":"Run!","severity":10,"timestamp":datetime("2015-11-25T09:20:00"),"expirationTime":datetime("2015-11-25T09:40:00")}

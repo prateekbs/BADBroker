@@ -1,0 +1,46 @@
+
+use dataverse channels;
+
+create function recentEmergenciesOfType($emergencyType){
+	for $report in dataset EmergencyReports
+	let $tenMinutesAgo := current-datetime() - day-time-duration("PT10M")
+	where $report.timestamp >= $tenMinutesAgo
+	and $report.emergencyType = $emergencyType
+	return $report
+}
+create repetitive channel recentEmergenciesOfTypeChannel using recentEmergenciesOfType@1 period duration("PT10S");
+
+
+subscribe to recentEmergenciesOfTypeChannel ("tornado") on brokerA;
+
+
+
+
+create function recentEmergenciesOfTypeAtLocation($emergencyType, $location){
+	for $report in dataset EmergencyReports
+	let $tenMinutesAgo := current-datetime() - day-time-duration("PT10M")
+	where $report.timestamp >= $tenMinutesAgo
+	and $report.emergencyType = $emergencyType
+	and spatial-intersect($report.impactZone,$location)
+	return $report
+}
+create repetitive channel recentEmergenciesOfTypeAtLocationChannel using recentEmergenciesOfTypeAtLocation@2 period duration("PT10M");
+subscribe to recentEmergenciesOfTypeAtLocationChannel ("tornado",create-point(30.0,70.0)) on brokerA;
+
+
+
+
+create function recentEmergenciesOfTypeAtLocation($emergencyType, $location){
+	for $report in dataset EmergencyReports
+	let $tenMinutesAgo := current-datetime() - day-time-duration("PT10M")
+	where $report.timestamp >= $tenMinutesAgo
+	and $report.emergencyType = $emergencyType
+	and spatial-intersect($report.impactZone,$location)
+	return {
+		"impactZone":$report.impactZone,
+		"message":$report.message,
+		"shelters":for $shelter in dataset EmergencyShelters where spatial-intersect($report.impactZone,$shelter.location) return $shelter
+	}
+}
+create repetitive channel recentEmergenciesOfTypeAtLocationChannel using recentEmergenciesOfTypeAtLocation@2 period duration("PT10M");
+subscribe to recentEmergenciesOfTypeAtLocationChannel ("tornado",create-point(30.0,70.0)) on brokerA;

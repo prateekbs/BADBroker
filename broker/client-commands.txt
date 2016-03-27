@@ -1,0 +1,8 @@
+# register(self, userName, email, password):
+# login(self, userName, password)
+# subscribe(self, userid, accesstoken, channelName, parameters)
+# getresults(self, requestHandler, userid, accesstoken, subid, timestamp, maxRecords)
+
+{"delay":0, "command" : "register"}
+{"delay":2, "command" : "login"}
+{"delay":1, "command": "subscribe", "channelName" : "nearbyTweetChannel", "parameters" : ["Dead"]}
