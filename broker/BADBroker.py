@@ -661,7 +661,7 @@ class BADBroker:
         with open("1") as f:
             for line in f.readlines():
                 if not line.startswith('#'):
-                    commands = commands + line + '\n'
+                    commands = commands + line
         log.info('Executing commands: ' + commands)
         status, response = yield self.asterix_backend.executeAQL(commands)
 
