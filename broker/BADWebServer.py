@@ -34,11 +34,15 @@ class RegistrationHandler(tornado.web.RequestHandler):
 
         log.debug(post_data)
 
-        userName = post_data['userName']
-        email = post_data['email']
-        password = post_data['password']
+        try:
+            userName = post_data['userName']
+            email = post_data['email']
+            password = post_data['password']
 
-        response = yield self.broker.register(userName, email, password)
+            response = yield self.broker.register(userName, email, password)
+
+        except KeyError as e:
+            response = {'status': 'failed', 'error': 'Bad formatted request'}
 
         self.write(json.dumps(response))
         self.flush()
@@ -56,10 +60,14 @@ class LoginHandler (tornado.web.RequestHandler):
 
         log.debug(post_data)
 
-        userName = post_data['userName']
-        password = post_data['password']
+        try:
+            userName = post_data['userName']
+            password = post_data['password']
 
-        response = yield self.broker.login(userName, password)
+            response = yield self.broker.login(userName, password)
+
+        except KeyError as e:
+            response = {'status': 'failed', 'error': 'Bad formatted request'}
 
         self.write(json.dumps(response))
         self.flush()
@@ -77,10 +85,14 @@ class LogoutHandler (tornado.web.RequestHandler):
 
         log.debug(post_data)
 
-        userId = post_data['userId']
-        accessToken = post_data['accessToken']
+        try:
+            userId = post_data['userId']
+            accessToken = post_data['accessToken']
 
-        response = yield self.broker.logout(userId, accessToken)
+            response = yield self.broker.logout(userId, accessToken)
+
+        except KeyError as e:
+            response = {'status': 'failed', 'error': 'Bad formatted request'}
 
         self.write(json.dumps(response))
         self.flush()
@@ -98,12 +110,15 @@ class SubscriptionHandler(tornado.web.RequestHandler):
 
         log.debug(post_data)
 
-        userId = post_data['userId']
-        accessToken = post_data['accessToken']
-        channelName = post_data['channelName']
-        parameters = post_data['parameters']
+        try:
+            userId = post_data['userId']
+            accessToken = post_data['accessToken']
+            channelName = post_data['channelName']
+            parameters = post_data['parameters']
 
-        response = yield self.broker.subscribe(userId, accessToken, channelName, parameters)
+            response = yield self.broker.subscribe(userId, accessToken, channelName, parameters)
+        except KeyError as e:
+            response = {'status': 'failed', 'error': 'Bad formatted request'}
 
         self.write(json.dumps(response))
         self.flush()
@@ -121,12 +136,14 @@ class UnsubscriptionHandler(tornado.web.RequestHandler):
 
         log.debug(post_data)
 
-        userId = post_data['userId']
-        accessToken = post_data['accessToken']
-        userSubscriptionId = post_data['userScriptionId']
+        try:
+            userId = post_data['userId']
+            accessToken = post_data['accessToken']
+            userSubscriptionId = post_data['userSubscriptionId']
 
-
-        response = yield self.broker.unsubscribe(userId, accessToken, userSubscriptionId)
+            response = yield self.broker.unsubscribe(userId, accessToken, userSubscriptionId)
+        except KeyError as e:
+            response = {'status': 'failed', 'error': 'Bad formatted request'}
 
         self.write(json.dumps(response))
         self.flush()
@@ -147,13 +164,16 @@ class GetResultsHandler(tornado.web.RequestHandler):
 
         log.debug(post_data)
 
-        userId = post_data['userId']
-        accessToken = post_data['accessToken']
-        channelName = post_data['channelName']
-        subscriptionId = post_data['userSubscriptionId']
-        deliveryTime = post_data['deliveryTime']
+        try:
+            userId = post_data['userId']
+            accessToken = post_data['accessToken']
+            channelName = post_data['channelName']
+            subscriptionId = post_data['userSubscriptionId']
+            deliveryTime = post_data['deliveryTime']
 
-        response = yield self.broker.getresults(userId, accessToken, subscriptionId, deliveryTime)
+            response = yield self.broker.getresults(userId, accessToken, subscriptionId, deliveryTime)
+        except KeyError as e:
+            response = {'status': 'failed', 'error': 'Bad formatted request'}
 
         print(json.dumps(response))
         self.write(json.dumps(response))
