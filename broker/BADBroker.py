@@ -21,8 +21,9 @@ import BADCache
 log.getLogger(__name__)
 log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=log.DEBUG)
 
-host = 'http://cacofonix-2.ics.uci.edu:19002'
+#host = 'http://cacofonix-2.ics.uci.edu:19002'
 #host = 'http://128.195.52.196:19002'
+host = 'http://45.55.22.117:19002/'
 
 asterix_backend = AsterixQueryManager(host)
 # asterix_backend.setDataverseName('emergencyTest')
