@@ -210,8 +210,7 @@ class NotifyBrokerHandler(tornado.web.RequestHandler):
 
 def start_server():
     broker = BADBroker()
-    broker.setupBroker()
-
+    
     application = tornado.web.Application([
         (r"/", MainHandler),
         (r"/register", RegistrationHandler, dict(broker=broker)),
