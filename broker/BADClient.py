@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-import tornado.httpclient
-import tornado.gen
 import requests
 import simplejson as json
 import time
@@ -9,24 +7,7 @@ import threading
 import pika
 import sys
 
-
-def service_call(URL, service_point, post_data):
-    http_client = tornado.httpclient.HTTPClient()
-    try:        
-        request = tornado.httpclient.HTTPRequest(URL + "/" + service_point, method='POST', body=json.dumps(post_data))
-        response = http_client.fetch(request)
-        return json.loads(response.body)
-        
-    except tornado.httpclient.HTTPError as e:
-        # HTTPError is raised for non-200 responses; the response
-        # can be found in e.response.
-        print("Error: " + str(e))
-    except Exception as e:
-        # Other errors are possible, such as IOError.
-        print("Errorf: " + str(e))
-    
-URL = "http://localhost:8989"
-
+brokerUrl = "http://cert24.ics.uci.edu:8989"
 
 class BADClient:
     def __init__(self, brokerUrl):
@@ -38,8 +19,6 @@ class BADClient:
         self.accessToken = ""
         self.subscriptions = {}
         self.brokerUrl = brokerUrl
-
-        self.http_client = tornado.httpclient.HTTPClient()
 
         self.rqthread = None
         self.rqchannel = None
@@ -248,7 +227,7 @@ def test_client():
         for item in results:
             print(item)
 
-    client = BADClient(brokerUrl='http://localhost:8989')
+    client = BADClient(brokerUrl=brokerUrl)
     client.register(sys.argv[1], 'yusuf', 'yusuf')
     if client.login():
         if client.subscribe('nearbyTweetChannel', ['man'], on_result):
