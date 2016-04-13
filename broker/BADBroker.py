@@ -585,11 +585,11 @@ class BADBroker:
 
         # Retrieve the lastest delivery time for this channel
         if channelName in self.channelLastResultDeliveryTime:
-            query = 'let $times := for $t in dataset nearbyTweetChannelResults ' \
+            query = 'let $times := for $t in dataset allEmergenciesChannelResults ' \
                     'where $t.deliveryTime > datetime(\"{0}\") ' \
                     'return $t.deliveryTime\n max($times)'.format(self.channelLastResultDeliveryTime[channelName])
         else:
-            query = 'let $times := for $t in dataset nearbyTweetChannelResults ' \
+            query = 'let $times := for $t in dataset allEmergenciesChannelResults ' \
                     'return $t.deliveryTime\n return max($times)'
 
         status, response = yield self.asterix_backend.executeQuery(query)

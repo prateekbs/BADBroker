@@ -68,9 +68,10 @@ def feedRecord(filename):
                 print('Insertation failed, %s' % str(r.text))
             
             #flask_update=requests.get(flaskURL+'/update',params={'statements':stmt})
-
-            #express_update=requests.get(expressURL+'/update',params={'statements':stmt})
-
-
+            
+            try:
+                express_update=requests.get(expressURL+'/update',params={'statements':stmt})
+            except:
+                pass
 if __name__ == "__main__":
     feedRecord(sys.argv[1])

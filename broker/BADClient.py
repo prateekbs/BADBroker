@@ -126,12 +126,12 @@ class BADClient:
             return False
 
     def onNotifiedFromBroker(self, channel, method, properties, body):
-        print('Notified from broker', str(body, encoding='utf-8'))
+        #print('Notified from broker', str(body, encoding='utf-8'))
         response = json.loads(body)
         channelName = response['channelName']
         lastestDeliveryTime = response['timestamp']
 
-        print(self.subscriptions)
+        #print(self.subscriptions)
 
         if channelName not in self.subscriptions:
             print('No active subscription for channel', channelName)
@@ -140,7 +140,7 @@ class BADClient:
                 self.getresults(channelName, subscriptionId, lastestDeliveryTime)
 
     def getresults(self, channelName, subscriptionId, deliveryTime):
-        print('Getresults for %s' % subscriptionId)
+        #print('Getresults for %s' % subscriptionId)
 
         post_data = {'userId': self.userId,
                      'accessToken': self.accessToken,
@@ -164,7 +164,7 @@ class BADClient:
                 print('GetresultsError %s' % str(results['error']))
 
     def onNewResultsOnChannel(self, channelName, subscriptionId, deliveryTime, results):
-        print(self.userName, channelName, 'Channel results', results)
+        #print(self.userName, channelName, 'Channel results', results)
 
         if channelName not in self.subscriptions or subscriptionId not in self.subscriptions[channelName]:
             print('No active subscription for this channel')
@@ -174,7 +174,7 @@ class BADClient:
             results = results.replace('\n', '')
             allResultItems = json.loads(results)['results']
 
-            print('More new results received', len(allResultItems))
+            #print('More new results received', len(allResultItems))
             for item in allResultItems:
                 print(item)
 
@@ -227,9 +227,16 @@ class BADClient:
 
 def test_client():
     def on_result(channelName, subscriptionId, deliveryTime, results):
-        print(channelName, subscriptionId, deliveryTime)
-        for item in results:
-            print(item)
+        #print(channelName, subscriptionId, deliveryTime)
+        expressURL='http://104.131.132.18:3001'
+
+        if results:
+            for item in results:
+                print(item)
+                try:
+                    express_update=requests.get(expressURL+'/update',params={'statements':str(item)})
+                except:
+                    pass
 
     client = BADClient(brokerUrl=brokerUrl)
     #client.register(sys.argv[1], 'yusuf', 'yusuf')

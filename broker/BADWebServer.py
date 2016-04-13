@@ -192,8 +192,9 @@ class NotifyBrokerHandler(tornado.web.RequestHandler):
     def post(self):
         log.info('Broker received notifybroker')
         #log.info(str(self.request.body, encoding='utf-8'))
-        t=str(self.request.body)
+        t=str(self.request.body, encoding='utf-8')
         y=t[0:t.find('AUUI')-1]+'"'+t[t.find('AUUI')-1:-1]+'"'+t[-1]
+        print ('y is: '+y)
         post_data=json.loads(y)
         #post_data = json.loads(self.request.body)
         log.debug(post_data)

@@ -1,4 +1,4 @@
-drop dataverse channels if exists;
+rop dataverse channels if exists;
 create dataverse channels;
 use dataverse channels;
 
