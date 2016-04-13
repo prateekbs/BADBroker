@@ -136,6 +136,7 @@ class AsterixQueryManager():
         query = "use dataverse " + self.dataverseName + "; " + query + ";"
         params = {'statements': query}
         request_url = request_url + "?" + urllib.parse.urlencode(params)
+        log.info('Request URL hitting Asterix at: '+str(request_url))
         # response = requests.get(request_url, params = {"query": query, 'output': 'json'})
 
         httpclient = tornado.httpclient.AsyncHTTPClient()

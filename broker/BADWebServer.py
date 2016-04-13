@@ -21,7 +21,8 @@ log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', l
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.write("This is BAD broker!!")
-
+    def post(self):
+        print('Post message to MAIN')
 
 class RegistrationHandler(tornado.web.RequestHandler):
     def initialize(self, broker):
@@ -195,7 +196,7 @@ class NotifyBrokerHandler(tornado.web.RequestHandler):
 
         post_data = json.loads(self.request.body)
         log.debug(post_data)
-
+        log.info('Errors out before here')
         brokerName = None
         dataverseName = post_data['dataverseName']
         channelName = post_data['channelName']

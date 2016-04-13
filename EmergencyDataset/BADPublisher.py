@@ -5,16 +5,20 @@ import time
 import datetime
 import requests
 
-URL = 'http://cacofonix-2.ics.uci.edu:19002'
+URL = 'http://104.131.132.18:19002'
 
 def feedRecord(filename):
     jsonfile = filename + '.json'
     lastOffset = 0
     currentTime = datetime.datetime.now()
-
+    count=0
     with open(jsonfile) as f:
         for line in f.readlines():
+            count+=1
+            if (count>50):
+                break
             record = json.loads(line)
+        
 
             timestamp = None
             location = None
@@ -57,7 +61,6 @@ def feedRecord(filename):
 
             stmt = 'use dataverse channels; insert into dataset %s [%s]' % (filename, recordString)
 
-            print(stmt)
 
             r = requests.get(URL + '/update', params={'statements': stmt})
 

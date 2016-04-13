@@ -23,7 +23,7 @@ log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', l
 
 #host = 'http://cacofonix-2.ics.uci.edu:19002'
 #host = 'http://128.195.52.196:19002'
-host = 'http://45.55.22.117:19002/'
+host = 'http://104.131.132.18:19002'
 
 asterix_backend = AsterixQueryManager(host)
 # asterix_backend.setDataverseName('emergencyTest')
@@ -53,8 +53,7 @@ class BADObject:
         cmd_stmt = cmd_stmt + '('
         cmd_stmt = cmd_stmt + json.dumps(self.__dict__)
         cmd_stmt = cmd_stmt + ')'
-        log.debug(cmd_stmt)
-
+        log.debug('CMD_STATEMENT is: '+cmd_stmt)
         status, response = yield asterix_backend.executeUpdate(cmd_stmt)
         if status == 200:
             log.info('Object %s Id %s saved' % (self.__class__.__name__, self.recordId))
@@ -196,7 +195,7 @@ class BADBroker:
     def __init__(self):
         global asterix_backend
         self.asterix_backend = asterix_backend
-        self.brokerName = 'brokerA'  # self._myNetAddress()  # str(hashlib.sha224(self._myNetAddress()).hexdigest())
+        self.brokerName = 'brokerBAD'  # self._myNetAddress()  # str(hashlib.sha224(self._myNetAddress()).hexdigest())
         self.users = {}
         
         self.subscriptions = {}  # susbscription indexed by channelName -> channelSubscriptionId-> userId
@@ -329,8 +328,8 @@ class BADBroker:
                     parameter_list = parameter_list + str(value)
 
         aql_stmt = 'subscribe to ' + channelName + '(' + parameter_list + ') on ' + self.brokerName
-        log.debug(aql_stmt)
-
+        log.debug('AQL Statement: '+aql_stmt)
+    
         status_code, response = yield self.asterix_backend.executeAQL(aql_stmt)
 
         if status_code != 200:

@@ -7,7 +7,7 @@ import threading
 import pika
 import sys
 
-brokerUrl = "http://cert24.ics.uci.edu:8989"
+brokerUrl = "http://104.131.132.18:8989"
 
 class BADClient:
     def __init__(self, brokerUrl):
@@ -87,11 +87,9 @@ class BADClient:
 
     def subscribe(self, channelName, parameters, callback):
         print('Subscribe')
-
         if (channelName is None or parameters is None):
             print('Subscription failed: Empty channelname or callback')
             return
-
         if parameters is None:
             parameters = []
 
@@ -234,9 +232,10 @@ def test_client():
             print(item)
 
     client = BADClient(brokerUrl=brokerUrl)
-    client.register(sys.argv[1], 'yusuf', 'yusuf')
+    #client.register(sys.argv[1], 'yusuf', 'yusuf')
+    client.register('Prateek', 'prateekswamy', 'pass')
     if client.login():
-        if client.subscribe('nearbyTweetChannel', ['man'], on_result):
+        if client.subscribe('allEmergenciesChannel',['earthquake'], on_result):
         #if client.subscribe('recentEmergenciesOfTypeChannel', ['earthquake'], on_result):
             # Blocking call
             client.run()
