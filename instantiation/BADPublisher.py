@@ -29,7 +29,7 @@ def feedRecord(filename):
                 timeOffset = record['timeoffset']
                 timeOffset /= 100
                 wait = timeOffset - lastOffset
-                time.sleep(wait)
+                #time.sleep(wait)
                 timestamp = currentTime + datetime.timedelta(seconds=timeOffset)
                 timestamp = timestamp.strftime('%Y-%m-%dT%H:%M:%SZ')
                 lastOffset = timeOffset
@@ -69,9 +69,6 @@ def feedRecord(filename):
             
             #flask_update=requests.get(flaskURL+'/update',params={'statements':stmt})
             
-            try:
-                express_update=requests.get(expressURL+'/update',params={'statements':stmt})
-            except:
-                pass
+            express_update=requests.get(expressURL+'/update',params={'statements':stmt})
 if __name__ == "__main__":
     feedRecord(sys.argv[1])
