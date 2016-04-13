@@ -194,7 +194,7 @@ class NotifyBrokerHandler(tornado.web.RequestHandler):
         #log.info(str(self.request.body, encoding='utf-8'))
         t=str(self.request.body)
         y=t[0:t.find('AUUI')-1]+'"'+t[t.find('AUUI')-1:-1]+'"'+t[-1]
-        post_data=json.loads(self.request.body)
+        post_data=json.loads(y)
         #post_data = json.loads(self.request.body)
         log.debug(post_data)
         log.info('Errors out before here')
