@@ -10,8 +10,8 @@ URL = 'http://104.131.132.18:19002'
 def feedRecord(filename):
     with open(filename) as f:
         lines=f.read()
-        r = requests.get(URL + '/ddl', params={'ddl': lines})
+        r = requests.get(URL + '/ddl', params={'ddl': lines},timeout=10)
         if r.status_code!=200:
             print('Request Fail'+str(r.text))
 if __name__ == "__main__":
-    feedRecord('ddl')
+    feedRecord(sys.argv[1])

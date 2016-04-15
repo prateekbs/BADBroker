@@ -61,14 +61,16 @@ def feedRecord(filename):
             print(recordString)
             stmt = 'use dataverse channels; insert into dataset %s [%s]' % (filename, recordString)
 
-    
-            r = requests.get(URL + '/update', params={'statements': stmt})
+         
+            r = requests.get(URL + '/update', params={'statements': stmt},timeout=5)
 
             if r.status_code != 200:
                 print('Insertation failed, %s' % str(r.text))
             
             #flask_update=requests.get(flaskURL+'/update',params={'statements':stmt})
-            
-            express_update=requests.get(expressURL+'/update',params={'statements':stmt})
+            try: 
+                express_update=requests.get(expressURL+'/update',params={'statements':stmt},timeout=1)
+            except:
+                pass
 if __name__ == "__main__":
     feedRecord(sys.argv[1])
