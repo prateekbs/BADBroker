@@ -1,6 +1,0 @@
-
-use dataverse channels;
-
-subscribe to nearbyTweetChannel ("Live") on brokerA;
-
-subscribe to nearbyTweetChannel ("Dead") on brokerA;

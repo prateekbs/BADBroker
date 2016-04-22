@@ -19,14 +19,11 @@ import logging as log
 import BADCache
 
 log.getLogger(__name__)
-log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=log.DEBUG)
+log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=log.INFO)
 
-#host = 'http://cacofonix-2.ics.uci.edu:19002'
-#host = 'http://128.195.52.196:19002'
-host = 'http://104.131.132.18:19002'
+host = 'http://localhost:19002'
 
 asterix_backend = AsterixQueryManager(host)
-# asterix_backend.setDataverseName('emergencyTest')
 asterix_backend.setDataverseName('channels')
 
 
@@ -192,10 +189,11 @@ class BADException(Exception):
 
 
 class BADBroker:    
-    def __init__(self):
+    def __init__(self,brokerName):
         global asterix_backend
         self.asterix_backend = asterix_backend
-        self.brokerName = 'brokerBAD'  # self._myNetAddress()  # str(hashlib.sha224(self._myNetAddress()).hexdigest())
+        self.brokerName = brokerName
+        # self._myNetAddress()  # str(hashlib.sha224(self._myNetAddress()).hexdigest())
         self.users = {}
         
         self.subscriptions = {}  # susbscription indexed by channelName -> channelSubscriptionId-> userId
@@ -235,15 +233,11 @@ class BADBroker:
 
     @tornado.gen.coroutine
     def register(self, userName, email, password):
-        # user = yield self.loadUser(userName)
-
         users = yield User.load(userName=userName)
-
         if users and len(users) > 0:
             user = users[0]
             self.users[userName] = user
             log.warning('User %s is already registered' % (user.userId))
-
             return {'status': 'failed', 'error': 'User is already registered with the same name!',
                     'userId': user.userId}
         else:
@@ -251,9 +245,7 @@ class BADBroker:
             user = User(userId, userId, userName, password, email)
             yield user.save()
             self.users[userName] = user
-
             log.debug('Registered user %s with id %s' % (userName, userId))
-
             return {'status': 'success', 'userId': userId}
 
     @tornado.gen.coroutine
@@ -582,11 +574,11 @@ class BADBroker:
     @tornado.gen.coroutine
     def retrieveLastestResultsAndNotifyUsers(self, channelName):
         log.debug('Current subscriptions: %s' % self.subscriptions)
-
+        channelResultsName=channelName+'Results'
         # Retrieve the lastest delivery time for this channel
         if channelName in self.channelLastResultDeliveryTime:
-            query = 'let $times := for $t in dataset allEmergenciesChannelResults ' \
-                    'where $t.deliveryTime > datetime(\"{0}\") ' \
+            query = 'let $times := for $t in dataset '+ channelResultsName + \
+                    ' where $t.deliveryTime > datetime(\"{0}\") ' \
                     'return $t.deliveryTime\n max($times)'.format(self.channelLastResultDeliveryTime[channelName])
         else:
             query = 'let $times := for $t in dataset allEmergenciesChannelResults ' \
@@ -668,31 +660,4 @@ class BADBroker:
         if status != 200:
             log.error('Broker setup failed ' + response)
 
-def test_broker():
-    broker = BADBroker(asterix_backend)
-    
-    print(broker.register('sarwar', 'ysar@gm.com', 'pass'))
-    
-    result = broker.login('sarwar', 'pass')
-    userId = result['userId']
-    accessToken = result['accessToken']
-
-    # print(broker.listchannels(userId, accessToken))
-    # print(broker.getChannelInfo(userId, accessToken, 'EmergencyMessagesChannel'))
-    result = broker.subscribe(userId, accessToken, 'nearbyTweetChannel', [12])
-    
-    subscriptionId = result['subscriptionId']
-    print(broker.getresults(userId, accessToken, 'nearbyTweetChannel', subscriptionId, 12235, 100))
-
-    print(broker.listchannels(userId, accessToken))
-    
-    print(broker.notifyBroker(broker.brokerName, 
-                'nearbyTweetChannel', [{'subscriptionId': subscriptionId, 'timestamp': 121, 'recordCount': 12}]))
-    
-    # test = {'A': 12, 'B': [{'X': 12}, {'Y': 23}, {'Z': 34}]}
-    # print(test['B'][0])
-
-
-if __name__ == '__main__':
-    test_broker()
 

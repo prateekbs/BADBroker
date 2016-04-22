@@ -1,9 +1,0 @@
-# register(self, userName, email, password):
-# login(self, userName, password)
-# subscribe(self, userid, accesstoken, channelName, parameters)
-# getresults(self, requestHandler, userid, accesstoken, subid, timestamp, maxRecords)
-
-{"command" : "register", "userName" : "yusuf", "email": "yusuf@acvb.mdc", "password" : "12345" }
-{"command" : "login"}
-{"command": "subscribe", "channelName" : "nearbyTweetChannel", "parameters" : ["live"]}
-

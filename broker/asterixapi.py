@@ -6,7 +6,7 @@ import tornado.httpclient
 import logging as log
 
 log.getLogger(__name__)
-log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=log.DEBUG)
+log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=log.INFO)
 
 class AsterixQueryManager():
     def __init__(self, baseURL, servicePoint='query'):
@@ -136,7 +136,7 @@ class AsterixQueryManager():
         query = "use dataverse " + self.dataverseName + "; " + query + ";"
         params = {'statements': query}
         request_url = request_url + "?" + urllib.parse.urlencode(params)
-        log.info('Request URL hitting Asterix at: '+str(request_url))
+        log.debug('Request URL hitting Asterix at: '+str(request_url))
         # response = requests.get(request_url, params = {"query": query, 'output': 'json'})
 
         httpclient = tornado.httpclient.AsyncHTTPClient()

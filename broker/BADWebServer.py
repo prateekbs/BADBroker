@@ -15,14 +15,13 @@ from asterixapi import AsterixQueryManager
 import logging as log
 
 log.getLogger(__name__)
-log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=log.DEBUG)
+log.basicConfig(filename='BADWebServer.log',format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=log.DEBUG)
 
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.write("This is BAD broker!!")
-    def post(self):
-        print('Post message to MAIN')
+        self.write("BAD WebServer")
+
 
 class RegistrationHandler(tornado.web.RequestHandler):
     def initialize(self, broker):
@@ -32,19 +31,14 @@ class RegistrationHandler(tornado.web.RequestHandler):
     def post(self):
         log.info(str(self.request.body, encoding='utf-8'))
         post_data = json.loads(str(self.request.body, encoding='utf-8'))
-
         log.debug(post_data)
-
         try:
             userName = post_data['userName']
             email = post_data['email']
             password = post_data['password']
-
             response = yield self.broker.register(userName, email, password)
-
         except KeyError as e:
             response = {'status': 'failed', 'error': 'Bad formatted request'}
-
         self.write(json.dumps(response))
         self.flush()
         self.finish()
@@ -190,15 +184,9 @@ class NotifyBrokerHandler(tornado.web.RequestHandler):
 
     @tornado.gen.coroutine
     def post(self):
-        log.info('Broker received notifybroker')
-        #log.info(str(self.request.body, encoding='utf-8'))
-        t=str(self.request.body, encoding='utf-8')
-        y=t[0:t.find('AUUI')-1]+'"'+t[t.find('AUUI')-1:-1]+'"'+t[-1]
-        print ('y is: '+y)
-        post_data=json.loads(y)
-        #post_data = json.loads(self.request.body)
+        log.info('Broker Received Notification from backend')
+        post_data = json.loads(self.request.body)
         log.debug(post_data)
-        log.info('Errors out before here')
         brokerName = None
         dataverseName = post_data['dataverseName']
         channelName = post_data['channelName']
@@ -211,9 +199,8 @@ class NotifyBrokerHandler(tornado.web.RequestHandler):
         self.flush()
         self.finish()
 
-def start_server():
-    broker = BADBroker()
-    
+def start_server(brokerName):
+    broker = BADBroker(brokerName)
     application = tornado.web.Application([
         (r"/", MainHandler),
         (r"/register", RegistrationHandler, dict(broker=broker)),
@@ -229,4 +216,9 @@ def start_server():
     tornado.ioloop.IOLoop.current().start()
     
 if __name__ == "__main__":
-    start_server()
+    defaultBrokerName='brokerBAD'
+    if (len(sys.argv)>1):
+        brokerName=sys.argv[1]
+    else:
+        brokerName=defaultBrokerName
+    start_server(brokerName)

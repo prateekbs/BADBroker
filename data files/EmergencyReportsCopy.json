@@ -1,0 +1,38 @@
+{"severity": 1, "impactZone": {"radius": 1000, "center": {"y": 1062.65, "x": 3129.31}}, "timeoffset": 544.73, "duration": 900.00, "message": "1 duck under table", "emergencyType": "earthquake"}
+{"severity": 1, "impactZone": {"radius": 100, "center": {"y": 1968.20, "x": 1127.81}}, "timeoffset": 8614.21, "duration": 1800.00, "message": "1 Call 911", "emergencyType": "shooting"}
+{"severity": 1, "impactZone": {"radius": 100, "center": {"y": 2309.75, "x": 2168.66}}, "timeoffset": 8624.58, "duration": 1800.00, "message": "2 shooting alert!", "emergencyType": "shooting"}
+{"severity": 1, "impactZone": {"radius": 100, "center": {"y": 1966.30, "x": 1127.47}}, "timeoffset": 8744.66, "duration": 1800.00, "message": "3 Run", "emergencyType": "shooting"}
+{"severity": 1, "impactZone": {"radius": 100, "center": {"y": 2314.79, "x": 2173.20}}, "timeoffset": 8816.71, "duration": 1800.00, "message": "4 Stay away from Downtown LA. Shooting Alert", "emergencyType": "shooting"}
+{"severity": 1, "impactZone": {"radius": 2000, "center": {"y": 1594.90, "x": 35.75}}, "timeoffset": 8823.18, "duration": 21600.00, "message": "hurricane alert!", "emergencyType": "hurricane"}
+{"severity": 1, "impactZone": {"radius": 2000, "center": {"y": 1819.20, "x": 194.24}}, "timeoffset": 8837.35, "duration": 21600.00, "message": "hurricane alert!", "emergencyType": "hurricane"}
+{"severity": 1, "impactZone": {"radius": 2000, "center": {"y": 1677.36, "x": 308.11}}, "timeoffset": 9021.34, "duration": 21600.00, "message": "hurricane alert!", "emergencyType": "hurricane"}
+{"severity": 1, "impactZone": {"radius": 2000, "center": {"y": 1870.20, "x": 0.00}}, "timeoffset": 9120.03, "duration": 21600.00, "message": "hurricane alert!", "emergencyType": "hurricane"}
+{"severity": 1, "impactZone": {"radius": 100, "center": {"y": 2322.75, "x": 2155.08}}, "timeoffset": 9126.28, "duration": 1800.00, "message": "5 Shooting alert", "emergencyType": "shooting"}
+{"severity": 1, "impactZone": {"radius": 2000, "center": {"y": 1941.59, "x": 82.14}}, "timeoffset": 9169.51, "duration": 21600.00, "message": "hurricane alert!", "emergencyType": "hurricane"}
+{"severity": 1, "impactZone": {"radius": 2000, "center": {"y": 1877.78, "x": 0.00}}, "timeoffset": 9252.07, "duration": 21600.00, "message": "hurricane alert!", "emergencyType": "hurricane"}
+{"severity": 1, "impactZone": {"radius": 100, "center": {"y": 2305.74, "x": 2163.19}}, "timeoffset": 9363.87, "duration": 1800.00, "message": "6 shooting alert!", "emergencyType": "shooting"}
+{"severity": 1, "impactZone": {"radius": 2000, "center": {"y": 1963.41, "x": 287.03}}, "timeoffset": 9404.15, "duration": 21600.00, "message": "hurricane alert!", "emergencyType": "hurricane"}
+{"severity": 1, "impactZone": {"radius": 2000, "center": {"y": 1912.30, "x": 0.00}}, "timeoffset": 9411.99, "duration": 21600.00, "message": "hurricane alert!", "emergencyType": "hurricane"}
+{"severity": 1, "impactZone": {"radius": 1000, "center": {"y": 1125.83, "x": 2953.28}}, "timeoffset": 552.25, "duration": 900.00, "message": "2 - Watch out for debris", "emergencyType": "earthquake"}
+{"severity": 1, "impactZone": {"radius": 1000, "center": {"y": 1084.23, "x": 3087.46}}, "timeoffset": 552.31, "duration": 900.00, "message": "3 - Do not use the elevator", "emergencyType": "earthquake"}
+{"severity": 1, "impactZone": {"radius": 2000, "center": {"y": 1962.40, "x": 158.51}}, "timeoffset": 3397.67, "duration": 21600.00, "message": "hurricane alert!", "emergencyType": "hurricane"}
+{"severity": 1, "impactZone": {"radius": 100, "center": {"y": 494.40, "x": 1495.57}}, "timeoffset": 3423.69, "duration": 1800.00, "message": "7 shooting alert!", "emergencyType": "shooting"}
+{"severity": 1, "impactZone": {"radius": 100, "center": {"y": 501.78, "x": 1500.96}}, "timeoffset": 3444.20, "duration": 1800.00, "message": "8 shooting alert!", "emergencyType": "shooting"}
+{"severity": 1, "impactZone": {"radius": 100, "center": {"y": 487.95, "x": 1493.69}}, "timeoffset": 3445.73, "duration": 1800.00, "message": "9 shooting alert!", "emergencyType": "shooting"}
+{"severity": 1, "impactZone": {"radius": 100, "center": {"y": 501.16, "x": 1490.09}}, "timeoffset": 3552.50, "duration": 1800.00, "message": "10 shooting alert!", "emergencyType": "shooting"}
+{"severity": 1, "impactZone": {"radius": 100, "center": {"y": 502.22, "x": 1491.76}}, "timeoffset": 3567.85, "duration": 1800.00, "message": "11 shooting alert!", "emergencyType": "shooting"}
+{"severity": 1, "impactZone": {"radius": 100, "center": {"y": 496.22, "x": 1488.22}}, "timeoffset": 3596.70, "duration": 1800.00, "message": "12 shooting alert!", "emergencyType": "shooting"}
+{"severity": 1, "impactZone": {"radius": 1000, "center": {"y": 1039.65, "x": 3123.33}}, "timeoffset": 562.06, "duration": 900.00, "message": "4 earthquake alert!", "emergencyType": "earthquake"}
+{"severity": 1, "impactZone": {"radius": 2000, "center": {"y": 1785.07, "x": 49.42}}, "timeoffset": 3372.47, "duration": 21600.00, "message": "hurricane alert!", "emergencyType": "hurricane"}
+{"severity": 1, "impactZone": {"radius": 2000, "center": {"y": 1708.36, "x": 0.00}}, "timeoffset": 3774.72, "duration": 21600.00, "message": "hurricane alert!", "emergencyType": "hurricane"}
+{"severity": 1, "impactZone": {"radius": 2000, "center": {"y": 1973.93, "x": 48.60}}, "timeoffset": 3779.25, "duration": 21600.00, "message": "hurricane alert!", "emergencyType": "hurricane"}
+{"severity": 1, "impactZone": {"radius": 2000, "center": {"y": 1698.07, "x": 284.03}}, "timeoffset": 3819.11, "duration": 21600.00, "message": "hurricane alert!", "emergencyType": "hurricane"}
+{"severity": 1, "impactZone": {"radius": 2000, "center": {"y": 1841.69, "x": 96.96}}, "timeoffset": 3896.08, "duration": 21600.00, "message": "hurricane alert!", "emergencyType": "hurricane"}
+{"severity": 1, "impactZone": {"radius": 2000, "center": {"y": 1797.50, "x": 184.05}}, "timeoffset": 3949.35, "duration": 21600.00, "message": "hurricane alert!", "emergencyType": "hurricane"}
+{"severity": 1, "impactZone": {"radius": 2000, "center": {"y": 1868.56, "x": 283.33}}, "timeoffset": 3994.03, "duration": 21600.00, "message": "hurricane alert!", "emergencyType": "hurricane"}
+{"severity": 1, "impactZone": {"radius": 1000, "center": {"y": 1106.21, "x": 3027.66}}, "timeoffset": 839.14, "duration": 900.00, "message": "5 earthquake alert!", "emergencyType": "earthquake"}
+{"severity": 1, "impactZone": {"radius": 2000, "center": {"y": 1725.58, "x": 137.67}}, "timeoffset": 4143.04, "duration": 21600.00, "message": "hurricane alert!", "emergencyType": "hurricane"}
+{"severity": 1, "impactZone": {"radius": 100, "center": {"y": 495.79, "x": 1489.11}}, "timeoffset": 4234.28, "duration": 1800.00, "message": "13 shooting alert!", "emergencyType": "shooting"}
+{"severity": 1, "impactZone": {"radius": 100, "center": {"y": 496.91, "x": 1487.10}}, "timeoffset": 4440.52, "duration": 1800.00, "message": "14 shooting alert!", "emergencyType": "shooting"}
+{"severity": 1, "impactZone": {"radius": 2000, "center": {"y": 1834.21, "x": 296.31}}, "timeoffset": 4603.29, "duration": 21600.00, "message": "hurricane alert!", "emergencyType": "hurricane"}
+{"severity": 1, "impactZone": {"radius": 2000, "center": {"y": 1906.11, "x": 177.84}}, "timeoffset": 4808.75, "duration": 21600.00, "message": "hurricane alert!", "emergencyType": "hurricane"}

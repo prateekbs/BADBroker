@@ -2,7 +2,7 @@ import pika
 import  logging as log
 
 log.getLogger(__name__)
-log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=log.DEBUG)
+log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=log.ERROR)
 
 class RabbitMQ(object):
     def __init__(self, host='localhost'):
