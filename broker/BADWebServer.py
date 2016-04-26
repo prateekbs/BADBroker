@@ -15,12 +15,14 @@ from asterixapi import AsterixQueryManager
 import logging as log
 
 log.getLogger(__name__)
-log.basicConfig(filename='BADWebServer.log',format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=log.DEBUG)
+log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=log.DEBUG)
 
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.write("BAD WebServer")
+    def post(self):
+        self.write("Warning. Asterix seems to have the wrong endpoint")
 
 
 class RegistrationHandler(tornado.web.RequestHandler):
@@ -58,8 +60,9 @@ class LoginHandler (tornado.web.RequestHandler):
         try:
             userName = post_data['userName']
             password = post_data['password']
+            platform=post_data['platform']
 
-            response = yield self.broker.login(userName, password)
+            response = yield self.broker.login(userName, password,platform)
 
         except KeyError as e:
             response = {'status': 'failed', 'error': 'Bad formatted request'}
