@@ -29,9 +29,9 @@ class RegistrationHandler(tornado.web.RequestHandler):
 
     @tornado.gen.coroutine
     def post(self):
-        log.info(str(self.request.body, encoding='utf-8'))
+        log.info('REQUEST BODY: '+str(self.request.body, encoding='utf-8'))
         post_data = json.loads(str(self.request.body, encoding='utf-8'))
-        log.debug(post_data)
+        log.debug('POST data: '+str(post_data))
         try:
             userName = post_data['userName']
             email = post_data['email']

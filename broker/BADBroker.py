@@ -19,7 +19,7 @@ import logging as log
 import BADCache
 
 log.getLogger(__name__)
-log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=log.INFO)
+log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=log.DEBUG)
 
 host = 'http://localhost:19002'
 
