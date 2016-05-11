@@ -133,7 +133,7 @@ class User(BADObject):
         self.recordId = recordId
         self.userId = userId
         self.userName = userName
-        self.password = password        
+        self.password = password
         self.email = email
 
     @classmethod
@@ -193,16 +193,16 @@ class BADException(Exception):
     pass
 
 
-class BADBroker:    
+class BADBroker:
     def __init__(self,brokerName='brokerBAD'):
         global asterix_backend
         self.asterix_backend = asterix_backend
         self.brokerName = brokerName  # self._myNetAddress()  # str(hashlib.sha224(self._myNetAddress()).hexdigest())
         self.users = {}
-        
+
         self.subscriptions = {}  # susbscription indexed by channelName -> channelSubscriptionId-> userId
         self.userToSubscriptionMap = {}  # indexed by userSubscriptionId
-        
+
         self.subscriptionLatestResultDeliveryTime = {}
 
         self.sessions = {}
@@ -211,8 +211,8 @@ class BADBroker:
 
     def _myNetAddress(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(('8.8.8.8', 0))  
-        mylocaladdr = str(s.getsockname()[0])                
+        s.connect(('8.8.8.8', 0))
+        mylocaladdr = str(s.getsockname()[0])
         return mylocaladdr
 
     @tornado.gen.coroutine
@@ -287,7 +287,7 @@ class BADBroker:
     def logoff(self, userId):
         if userId in self.sessions:
             del self.sessions[userId]
-        
+
         return {'status': 'success', 'userId': userId}
 
     @tornado.gen.coroutine
@@ -540,30 +540,30 @@ class BADBroker:
         check = self._checkAccess(userId, accessToken)
         if check['status'] == 'failed':
             return check
-        
+
         aql_stmt = 'for $channel in dataset Metadata.Channel return $channel'
         status, response = yield self.asterix_backend.executeQuery(aql_stmt)
-        
+
         if status == 200:
             response = response.replace('\n', '')
             print(response)
-            
+
             channels = json.loads(str(response, encoding='utf-8'))
 
-            return {'status': 'success', 'channels': channels}    
+            return {'status': 'success', 'channels': channels}
         else:
             return {'status': 'failed', 'error': response}
 
     @tornado.gen.coroutine
-    def getChannelInfo(self, channelName):                
+    def getChannelInfo(self, channelName):
         aql_stmt = 'for $t in dataset Metadata.Channel '
         aql_stmt = aql_stmt + 'where $t.ChannelName = \"' + channelName + '\" '
         aql_stmt = aql_stmt + 'return $t'
-        
+
         log.debug(aql_stmt)
-        
+
         status, response = yield self.asterix_backend.executeQuery(aql_stmt)
-        
+
         if status == 200:
             response = response.replace('\n', '')
             print(response)
@@ -571,7 +571,7 @@ class BADBroker:
             return {'status': 'success', 'channels': channels}
         else:
             return {'status': 'failed', 'error': response}
-    
+
     @tornado.gen.coroutine
     def notifyBroker(self, brokerName, dataverseName, channelName, subscriptionIds):
         # if brokerName != self.brokerName:
@@ -661,7 +661,7 @@ class BADBroker:
             else:
                 return {'status': 'failed',
                         'error': 'Invalid access token'}
-        else: 
+        else:
             return {'status': 'failed',
                     'error': 'User not authenticated'}
 
@@ -684,9 +684,9 @@ class BADBroker:
 
 def test_broker():
     broker = BADBroker(asterix_backend)
-    
+
     print(broker.register('sarwar', 'ysar@gm.com', 'pass'))
-    
+
     result = broker.login('sarwar', 'pass')
     userId = result['userId']
     accessToken = result['accessToken']
@@ -694,18 +694,17 @@ def test_broker():
     # print(broker.listchannels(userId, accessToken))
     # print(broker.getChannelInfo(userId, accessToken, 'EmergencyMessagesChannel'))
     result = broker.subscribe(userId, accessToken, 'nearbyTweetChannel', [12])
-    
+
     subscriptionId = result['subscriptionId']
     print(broker.getresults(userId, accessToken, 'nearbyTweetChannel', subscriptionId, 12235))
 
     print(broker.listchannels(userId, accessToken))
-    
+
     print(broker.notifyBroker(broker.brokerName, 'channels', 'nearbyTweetChannel', [subscriptionId]))
-    
+
     # test = {'A': 12, 'B': [{'X': 12}, {'Y': 23}, {'Z': 34}]}
     # print(test['B'][0])
 
 
 if __name__ == '__main__':
     test_broker()
-

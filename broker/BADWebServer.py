@@ -19,6 +19,8 @@ log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', l
 
 
 class MainHandler(tornado.web.RequestHandler):
+    def set_default_headers(self):
+        self.set_header("Access-Control-Allow-Origin", "*")
     def get(self):
         self.write("BAD WebServer")
     def post(self):
@@ -26,6 +28,9 @@ class MainHandler(tornado.web.RequestHandler):
 
 
 class RegistrationHandler(tornado.web.RequestHandler):
+    def set_default_headers(self):
+        self.set_header("Access-Control-Allow-Origin", "*")
+
     def initialize(self, broker):
         self.broker = broker
 
@@ -47,6 +52,9 @@ class RegistrationHandler(tornado.web.RequestHandler):
 
 
 class LoginHandler (tornado.web.RequestHandler):
+    def set_default_headers(self):
+        self.set_header("Access-Control-Allow-Origin", "*")
+
     def initialize(self, broker):
         self.broker = broker
 
@@ -188,11 +196,13 @@ class NotifyBrokerHandler(tornado.web.RequestHandler):
     @tornado.gen.coroutine
     def post(self):
         log.info('Broker Received Notification from backend')
+        log.info('Request Body' + str(self.request.body))
         post_data = json.loads(self.request.body)
         log.debug(post_data)
         brokerName = None
         dataverseName = post_data['dataverseName']
         channelName = post_data['channelName']
+        log.info('Subscription Keys: '+str(post_data.keys()))
         #subscriptions = post_data['subscriptions']
         subscriptions = None
 
@@ -214,10 +224,10 @@ def start_server(brokerName):
         (r"/getresults", GetResultsHandler, dict(broker=broker)),
         (r"/notifybroker", NotifyBrokerHandler, dict(broker=broker))
     ])
-    
+
     application.listen(8989)
     tornado.ioloop.IOLoop.current().start()
-    
+
 if __name__ == "__main__":
     defaultBrokerName='brokerBAD'
     if (len(sys.argv)>1):

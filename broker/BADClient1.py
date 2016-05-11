@@ -61,11 +61,11 @@ class BADClient:
                     print(self.userName, 'Register', json.dumps(response))
         else:
             print(r)
-            print('Registration failed for %s' %userName)            
+            print('Registration failed for %s' %userName)
 
     def login(self):
         print('Login')
-        post_data = {'userName' : self.userName, 'password': self.password}
+        post_data = {'userName' : self.userName, 'password': self.password,'platform':'desktop'}
         #response = service_call(URL, "login", post_data)
         r = requests.post(self.brokerUrl + '/login', data=json.dumps(post_data))
 
@@ -81,8 +81,8 @@ class BADClient:
                     print(self.userName, 'Login', json.dumps(response))
                     return True
         else:
-            print('Login failed for %s' %self.userName) 
-            print(r)      
+            print('Login failed for %s' %self.userName)
+            print(r)
             return False
 
     def subscribe(self, channelName, parameters, callback):
@@ -242,13 +242,13 @@ def test_client():
         except:
             pass
     client = BADClient(brokerUrl=brokerUrl)
-    #client.register(sys.argv[1], 'yusuf', 'yusuf')
     client.register('Prateek', 'prateekswamy', 'pass')
     if client.login():
-        if client.subscribe('allEmergenciesChannel',['earthquake'], on_result):
+        print('Client Login successful')
+        #if client.subscribe('allEmergenciesChannel',['earthquake'], on_result):
         #if client.subscribe('recentEmergenciesOfTypeChannel', ['earthquake'], on_result):
             # Blocking call
-            client.run()
+        #    client.run()
     else:
         print('Login failed')
 
