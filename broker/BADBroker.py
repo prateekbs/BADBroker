@@ -12,7 +12,6 @@ import simplejson as json
 
 from datetime import datetime
 from asterixapi import *
-import rabbitmq
 import redis
 import re
 import logging as log
@@ -201,7 +200,6 @@ class BADBroker:
         self.subscriptionLatestResultDeliveryTime = {}
 
         self.sessions = {}
-        self.rabbitMQ = rabbitmq.RabbitMQ()
         self.cache = BADCache.BADLruCache()
 
     def _myNetAddress(self):
@@ -635,8 +633,8 @@ class BADBroker:
                    'recordCount': 0,
                    'timestamp': latestDeliveryTime
                    }
+        #Need to plugin GCM or RabbitMQ here. Temporarily removed dependency.
 
-        self.rabbitMQ.sendMessage(userId, json.dumps(message))
 
     def _checkAccess(self, userId, accessToken):
         return {'status': 'success'}
@@ -653,17 +651,4 @@ class BADBroker:
 
 
     def __del__(self):
-        self.rabbitMQ.close()
-
-    @tornado.gen.coroutine
-    def setupBroker(self):
-        commands = ''
-        with open("1") as f:
-            for line in f.readlines():
-                if not line.startswith('#'):
-                    commands = commands + line
-        log.info('Executing commands: ' + commands)
-        status, response = yield self.asterix_backend.executeAQL(commands)
-
-        if status != 200:
-            log.error('Broker setup failed ' + response)
+        pass
