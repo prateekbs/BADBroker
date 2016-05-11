@@ -77,6 +77,5 @@ create function allEmergencies($emergencyType){
     return $report
 }
 
-create repetitive channel allEmergenciesChannel using allEmergencies@1 period duration("PT20S");
+create repetitive channel allEmergenciesChannel using allEmergencies@1 period duration("PT40S");
 create broker brokerBAD at "http://localhost:8989/notifybroker";
-

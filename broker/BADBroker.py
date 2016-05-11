@@ -21,13 +21,8 @@ import BADCache
 log.getLogger(__name__)
 log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=log.DEBUG)
 
-#host = 'http://cacofonix-2.ics.uci.edu:19002'
-#host = 'http://128.195.52.196:19002'
-#host = 'http://45.55.22.117:19002/'
 host='http://localhost:19002'
-
 asterix_backend = AsterixQueryManager(host)
-# asterix_backend.setDataverseName('emergencyTest')
 asterix_backend.setDataverseName('channels')
 
 
@@ -237,8 +232,6 @@ class BADBroker:
 
     @tornado.gen.coroutine
     def register(self, userName, email, password):
-        # user = yield self.loadUser(userName)
-
         users = yield User.load(userName=userName)
 
         if users and len(users) > 0:
@@ -249,7 +242,7 @@ class BADBroker:
             return {'status': 'failed', 'error': 'User is already registered with the same name!',
                     'userId': user.userId}
         else:
-            userId = userName  # str(hashlib.sha224(userName.encode()).hexdigest())
+            userId = userName
             user = User(userId, userId, userName, password, email)
             yield user.save()
             self.users[userName] = user
@@ -339,10 +332,7 @@ class BADBroker:
 
         response = response.replace('\n', '').replace(' ', '')
         log.debug(response)
-
-        # response = json.loads(response)
         channelSubscriptionId = re.match(r'\[uuid\(\"(.*)\"\)\]', response).group(1)
-
         uniqueId = channelName + '::' + channelSubscriptionId
         channelSubscription = ChannelSubscription(uniqueId, channelName, str(parameters), channelSubscriptionId)
         yield channelSubscription.save()
@@ -574,10 +564,6 @@ class BADBroker:
 
     @tornado.gen.coroutine
     def notifyBroker(self, brokerName, dataverseName, channelName, subscriptionIds):
-        # if brokerName != self.brokerName:
-        #    return {'status': 'failed', 'error': 'Not the intended broker %s' %(brokerName)}
-
-        # Register a callback to retrieve results for this notification and notify all users
         tornado.ioloop.IOLoop.current().add_callback(self.retrieveLatestResultsAndNotifyUsers, channelName, subscriptionIds)
         return {'status': 'success'}
 
@@ -681,30 +667,3 @@ class BADBroker:
 
         if status != 200:
             log.error('Broker setup failed ' + response)
-
-def test_broker():
-    broker = BADBroker(asterix_backend)
-
-    print(broker.register('sarwar', 'ysar@gm.com', 'pass'))
-
-    result = broker.login('sarwar', 'pass')
-    userId = result['userId']
-    accessToken = result['accessToken']
-
-    # print(broker.listchannels(userId, accessToken))
-    # print(broker.getChannelInfo(userId, accessToken, 'EmergencyMessagesChannel'))
-    result = broker.subscribe(userId, accessToken, 'nearbyTweetChannel', [12])
-
-    subscriptionId = result['subscriptionId']
-    print(broker.getresults(userId, accessToken, 'nearbyTweetChannel', subscriptionId, 12235))
-
-    print(broker.listchannels(userId, accessToken))
-
-    print(broker.notifyBroker(broker.brokerName, 'channels', 'nearbyTweetChannel', [subscriptionId]))
-
-    # test = {'A': 12, 'B': [{'X': 12}, {'Y': 23}, {'Z': 34}]}
-    # print(test['B'][0])
-
-
-if __name__ == '__main__':
-    test_broker()
